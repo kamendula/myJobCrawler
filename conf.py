@@ -3,7 +3,7 @@
 TITLE_INCLUDE_KEYWORD = ['Google',u'百度',u'微软'] 
 
 #设置你需要过滤掉的招聘信息关键词
-TITLE_LIMIT_KEYWORD = ['被取消']
+TITLE_LIMIT_KEYWORD = [u'被取消']
 
 #设置招聘信息源 BYR(邮人论坛) NS_XZ(水木清华校招) NS_SZ(水木清华社招) NS_LT(水木清华猎头)
 JOB_SOURCES = ['BYR','NS_XZ','NS_SZ','NS_LT'] 

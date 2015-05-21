@@ -10,6 +10,8 @@ import redis
 from conf import *
 import urllib
 import requests
+import web
+import json
 
 class article_repository(): 
 	#http://redis-py.readthedocs.org/en/latest/
@@ -23,7 +25,7 @@ class article_repository():
 	
 	#不同来源的招聘信息保存在不同的set里，比如Byr
 	def add_art(self,article,source):
-		self.repo.sadd(source + '_article_id',source + article['id'])
+                self.repo.sadd(source + '_article_id',source + article['id'])
 		self.repo.set(source + article['id'],article)
 
 	#根据不同来源来获取招聘信息
@@ -145,7 +147,7 @@ class crawler:
 
 	#将获取到的数据保存在redis中
 	def save_articles_in_redis(self,tgt_arts,source):
-		global art_repo
+#		global art_repo
 		for tgt_art in tgt_arts:
 			art_repo.add_art(tgt_art,source)
 
@@ -234,26 +236,48 @@ class crawler:
 #				break
 #		return content.format(arts_tag_with_keyword,arts_tag_without_keyword)
 
+class index:
+    def GET(self, source):
+        global html
+        if(source == 'BYR'):
+                with open('a.txt', 'w') as f:
+#                        global art_repo,content,SHOW_NUMBER
+                        arts = art_repo.get_arts_by_source(source)
+                        f.write(str(arts))
+                        return json.dumps(arts)
+
 #显示页面的模板
 html = open('html_model.html','rb').read().decode('UTF-8') 
 #显示招聘信息列表的模板
 content = open('list_content_model.html','rb').read().decode('UTF-8')
 art_repo = article_repository('localhost',6379,JOB_SOURCES)
-art_repo.remove()
+#art_repo.remove()
+
+urls = (
+    '/jobinfo/(BYR|NSXZ|NSSZ|NSLT)', 'index'
+#    '/', 'index'
+    )
+
+app = web.application(urls, globals())
 
 if __name__ == '__main__':
 	crawler_job = crawler(TITLE_INCLUDE_KEYWORD,TITLE_LIMIT_KEYWORD,JOB_SOURCES)
 	crawler_job.run()
 	sched = Scheduler()
 	sched.add_interval_job(crawler_job.run, hours=INTERVAL_TIME_CRAWLER)
-	sched.start()	
-	
-	try:
-		# 创建 HTTPSever 服务器，绑定地址：http://127.0.0.1:8080
-		server = HTTPServer(('127.0.0.1',8080), request_handler)
-		print('Start to Serve:......')	
-		# 启动 HTTPServer 服务器  
-		server.serve_forever()
-	except KeyboardInterrupt:
-		print("finish server ...")
-		server.socket.close()	  
+	sched.start()
+#        ind = index()
+#        r=json.dumps(ind.GET('BYR'))
+#        print r
+
+        try:
+
+                app.run()
+                print('Start to Serve:......')
+        except KeyboardInterrupt:
+                print("finish server ...")
+
+
+
+
+

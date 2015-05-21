@@ -1,15 +1,23 @@
 __author__ = 'kaka'
+#coding:gbk
 
 import web
 
 urls = (
-    '/jobinfo', 'index'
+    "/jobinfo/(byr|ns|)/(.+)", "index"
 )
 
 class index:
-    def GET(self):
-        return "Hello,world!"
+    def GET(self, name, name2):
+        print name
+        print name2
+        return "Hello,world!" + name + name2
 
 if __name__ == "__main__":
-    app = web.application(urls, globals())
-    app.run()
+    try:
+
+        app = web.application(urls, globals())
+        app.run()
+        print('Start to Serve:......')
+    except KeyboardInterrupt:
+        print("finish server ...")

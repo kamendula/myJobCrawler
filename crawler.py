@@ -236,25 +236,31 @@ class crawler:
 #				break
 #		return content.format(arts_tag_with_keyword,arts_tag_without_keyword)
 
-class index:
+class info:
     def GET(self, source):
-        global html
-        if(source == 'BYR'):
-                with open('a.txt', 'w') as f:
+        #global html
+        #if(source == 'BYR' || ''):
+
 #                        global art_repo,content,SHOW_NUMBER
-                        arts = art_repo.get_arts_by_source(source)
-                        f.write(str(arts))
-                        return json.dumps(arts)
+        arts = art_repo.get_arts_by_source(source)
+
+        return json.dumps(arts)
+
+class index:
+    def GET(self):
+        render = web.template.render('template/');
+        return render.html_model()
 
 #显示页面的模板
-html = open('html_model.html','rb').read().decode('UTF-8') 
+#html = open('html_model.html','rb').read().decode('UTF-8')
 #显示招聘信息列表的模板
-content = open('list_content_model.html','rb').read().decode('UTF-8')
+#content = open('list_content_model.html','rb').read().decode('UTF-8')
 art_repo = article_repository('localhost',6379,JOB_SOURCES)
 #art_repo.remove()
 
 urls = (
-    '/jobinfo/(BYR|NSXZ|NSSZ|NSLT)', 'index'
+    '/','index',
+    '/jobinfo/(BYR|NS_XZ|NS_SZ|NS_LT)', 'info'
 #    '/', 'index'
     )
 

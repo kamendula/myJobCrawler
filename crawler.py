@@ -174,67 +174,7 @@ class crawler:
 			for source in self.job_sources:
 				print(source)
 				self.get_articles_from_html(self.req_conf[source]['host'],self.req_conf[source]['url'],source)
-		
-#
-#class request_handler(BaseHTTPRequestHandler):
-#	#处于简单考虑，使用BaseHTTPRequestHandler处理请求的基本方法
-#	#除了主页以外，其他具体源的招聘信息是通过页面异步获取
-#	def do_GET(self):
-#		global html
-#		if self.path == '/':
-#			self.send_response(200)
-#			self.send_header("Content-type", "text/html")
-#			self.end_headers()
-#			self.wfile.write(bytes(html,'UTF-8'))
-#		elif 'byr' in self.path:
-#			self.send_response(200)
-#			self.send_header("Content-type", "text/html")
-#			self.end_headers()
-#			self.wfile.write(bytes(self.create_result_page('BYR'),'UTF-8'))
-#		elif 'nsxz' in self.path:
-#			self.send_response(200)
-#			self.send_header("Content-type", "text/html")
-#			self.end_headers()
-#			self.wfile.write(bytes(self.create_result_page('NS_XZ'),'UTF-8'))
-#		elif 'nssz' in self.path:
-#			self.send_response(200)
-#			self.send_header("Content-type", "text/html")
-#			self.end_headers()
-#			self.wfile.write(bytes(self.create_result_page('NS_SZ'),'UTF-8'))
-#		elif 'nslt' in self.path:
-#			self.send_response(200)
-#			self.send_header("Content-type", "text/html")
-#			self.end_headers()
-#			self.wfile.write(bytes(self.create_result_page('NS_LT'),'UTF-8'))
-#		else:
-#			self.send_response(404)
-#			self.send_header("Content-type", "text/html")
-#			self.end_headers()
-#
-#	def create_result_page(self,source):
-#		global art_repo,content,SHOW_NUMBER
-#		arts = art_repo.get_arts_by_source(source)
-#		arts_tag_with_keyword = ""
-#		arts_tag_without_keyword = ""
-#		for art in arts['arts_with_keyword']:
-#			tag =  '<tr>'
-#			tag += '<td>' + art['pub_time'] + '</td>'
-#			tag += '<td><span class="badge badge-important">' + ('|').join(art['interest']) + '</span></td>'
-#			tag += '<td><strong><a href=' + art['url'] + '>' + art['title'] + '</a></strong></td>'
-#			tag += '<td>' + art['source'] + '</td></tr>'
-#			arts_tag_with_keyword += tag
-#		index = 0
-#		for art in arts['arts_without_keyword']:
-#			if index < SHOW_NUMBER:
-#				tag =  '<tr>'
-#				tag += '<td>' + art['pub_time'] + '</td>'
-#				tag += '<td><strong><a href=' + art['url'] + '>' + art['title'] + '</a></strong></td>'
-#				tag += '<td>' + art['source'] + '</td></tr>'
-#				arts_tag_without_keyword += tag
-#				index += 1
-#			else:
-#				break
-#		return content.format(arts_tag_with_keyword,arts_tag_without_keyword)
+
 
 class info:
     def GET(self, source):
@@ -249,7 +189,7 @@ class info:
 class index:
     def GET(self):
         render = web.template.render('template/');
-        return render.html_model()
+        return render.test()
 
 #显示页面的模板
 #html = open('html_model.html','rb').read().decode('UTF-8')

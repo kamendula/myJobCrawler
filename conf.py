@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #设置你感兴趣的招聘信息关键词
-TITLE_INCLUDE_KEYWORD = ['Google',u'百度',u'微软'] 
+TITLE_INCLUDE_KEYWORD = ['Google',u'百度',u'微软',u'数据挖掘',u'金融']
 
 #设置你需要过滤掉的招聘信息关键词
 TITLE_LIMIT_KEYWORD = [u'被取消']

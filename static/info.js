@@ -1,41 +1,40 @@
-
-jQuery().ready(function() {
-	getData('/jobinfo/BYR','byr')
-	getData('/jobinfo/NS_XZ','nsxz')
-	getData('/jobinfo/NS_SZ','nssz')
-	getData('/jobinfo/NS_LT','nslt')
-	});
-function getData(url,id){
-    jQuery.ajax({
-        url		:  url,
-        type 	: 'get',
-        dataType: 'html',
-        cache: false,
-        success : function(data) {
-            //console.log(data);
-            processData(data);
-            },
-        error: function(data){
-        jQuery('div#'+id).append('没有数据')
-        }
-    })
+jQuery(document).ready(function(){
+	getData('/jobinfo/BYR');
 		
-}
+	jQuery("#byr").click(function(){
+		getData("/jobinfo/BYR", "ns_xz");
+	});
 
+	jQuery("#ns_xz").click(function(){
+		getData("/jobinfo/NS_XZ", "ns_xz");
+	});
 
-function processData(data){
-    console.log(data["arts_with_keyword"]);
-    datai=JSON.stringify(data);
-    inHtml="<table class=\"table table-striped\"><thead><tr><td>发布时间</td><td>标题</td></tr> </thead>  <tbody>";
-    var dataLists = datai["arts_with_keyword"];
-    console.log(dataLists);
-    for(var ldata in dataLists){
-        idata = "<tr><td>"+ldata["pub_time"]+"</td>";
-        idata += "<td>" + ldata["title"] + "</td></tr>";
-        inHtml += idata;
-    }
-    
-    inHtml += "</tbody></table>";
+	jQuery("#ns_sz").click(function(){
+		getData("/jobinfo/NS_SZ", "ns_sz");
+	});
 
-    jQuery("#myTab").after(inHtml);
+	jQuery("#ns_lt").click(function(){
+		getData("/jobinfo/NS_LT", "ns_lt");
+	});
+});
+
+function getData(url){
+	jQuery('#tb').empty();
+	jQuery.get(url,function(data){
+		//alert(data);
+		var data0 = eval("("+data+")");
+		var data1=data0.arts_with_keyword;
+		jQuery.each(data1,function(idx,item){
+			//alert(item);
+			var infoTime = item.pub_time;
+			var infoTitle = item.title;
+			var infoUrl = item.url;
+			var infoHtml = "<tr><td>"+infoTime+"</td><td><a href="+infoUrl+">"+infoTitle+"</a></td><tr>";
+			//alert(infoHtml);
+			jQuery('#tb').append(infoHtml);
+		})
+		//alert(data1.length);
+		
+	});
+
 }

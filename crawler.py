@@ -26,7 +26,7 @@ class article_repository():
 	#不同来源的招聘信息保存在不同的set里，比如Byr
 	def add_art(self,article,source):
                 self.repo.sadd(source + '_article_id',source + article['id'])
-		self.repo.set(source + article['id'],article)
+                self.repo.set(source + article['id'],article)
 
 	#根据不同来源来获取招聘信息
 	def get_arts_by_source(self,source):
@@ -70,7 +70,7 @@ class crawler:
 				}
 			},
 			'NS_XZ' :{
-				'host' : 'http://www.newsmth.net/',
+				'host' : 'http://www.newsmth.net',
 				'url'  : 'http://www.newsmth.net/nForum/board/Career_Campus',
 				'url_attr' : {
 					'href'   : re.compile('^/nForum/article/Career_Campus/\d+$'),
@@ -79,7 +79,7 @@ class crawler:
 				}
 			},
 			'NS_SZ' :{
-				'host' : 'http://www.newsmth.net/',
+				'host' : 'http://www.newsmth.net',
 				'url'  : 'http://www.newsmth.net/nForum/board/Career_Upgrade',
 				'url_attr' : {
 					'href'   : re.compile('^/nForum/article/Career_Upgrade/\d+$'),
@@ -88,7 +88,7 @@ class crawler:
 				}
 			},
 			'NS_LT' :{
-				'host' : 'http://www.newsmth.net/',
+				'host' : 'http://www.newsmth.net',
 				'url'  : 'http://www.newsmth.net/nForum/board/ExecutiveSearch',
 				'url_attr' : {
 					'href'   : re.compile('^/nForum/article/ExecutiveSearch/\d+$'),
@@ -114,8 +114,12 @@ class crawler:
 	def get_articles_from_html(self,host,tgt_html,source):
 		print(tgt_html)
 		req = requests.get(tgt_html,headers=self.req_conf['headers'])
+                #print req.content
 		#rep = urllib.urlopen(req)
-		art_tags = BeautifulSoup(req.content.decode('GBK')).find_all('tbody')[0].find_all('tr');
+                req = BeautifulSoup(req.content.decode('GBK')).find_all('tbody')
+                if req is None:
+                    return;
+		art_tags = req[0].find_all('tr');
 		tgt_arts = []
 		for art_tag in art_tags:
 			if 'class' not in art_tag.attrs:
@@ -189,7 +193,7 @@ class info:
 class index:
     def GET(self):
         render = web.template.render('template/');
-        return render.test()
+        return render.html_model()
 
 #显示页面的模板
 #html = open('html_model.html','rb').read().decode('UTF-8')
